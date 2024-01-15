@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 
 
 
@@ -7,6 +7,60 @@ const Home = () => {
 
 	const [inputValue, setInputValue] = useState("");
 	const [todos, setTodos] = useState([]);
+
+	function eliminarTareas(index){
+
+		
+		fetch('https://playground.4geeks.com/apis/fake/todos/user/AdriRiosRuiz', {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+	  body:JSON.stringify (todos.filter(
+		(t, currentIndex) => index != currentIndex
+	))
+    })
+    .then(resp => {
+        if (!resp.ok) throw Error(`La response es incorrecta`)
+		return resp.json();
+    })
+    .then(data => {
+      setTodos(data) 
+    })
+    .catch(error => {
+       
+        console.log(error);
+    });
+
+		setTodos(
+			todos.filter(
+				(t, currentIndex) => index != currentIndex
+			)
+		)
+
+	}
+
+	useEffect(() => {
+		
+		fetch('https://playground.4geeks.com/apis/fake/todos/user/AdriRiosRuiz', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(resp => {
+        if (!resp.ok) throw Error(`La response es incorrecta`)
+		return resp.json();
+    })
+    .then(data => {
+      setTodos(data) 
+    })
+    .catch(error => {
+       
+        console.log(error);
+    });
+
+	  } , [ ]);
 
 
 
@@ -30,11 +84,7 @@ const Home = () => {
 				{todos.map((item, index) => (
 					<li>
 
-						{item}	<i className="fa-sharp fa-solid fa-trash" style={{ color: '#000000' }} onClick={() => setTodos(
-							todos.filter(
-								(t, currentIndex) => index != currentIndex
-							)
-						)
+						{item.label}	<i className="fa-sharp fa-solid fa-trash" style={{ color: '#000000' }} onClick={() => eliminarTareas(index)
 						}></i>
 					</li>
 				))}
