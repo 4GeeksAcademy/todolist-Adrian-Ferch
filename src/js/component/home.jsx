@@ -1,101 +1,109 @@
-import React, { useState , useEffect} from "react";
-
+import React, { useEffect, useState } from "react";
 
 
 
 const Home = () => {
-
 	const [inputValue, setInputValue] = useState("");
 	const [todos, setTodos] = useState([]);
-
-	function eliminarTareas(index){
-
-		
+  
+	const handleInputChange = (e) => {
+	  setInputValue(e.target.value);
+	};
+  
+	const handleKeyPress = (e) => {
+	  if (e.key === "Enter" && inputValue.trim() !== "") {
+		const newTodo = { label: inputValue, done: false };
+		const updatedTodos = [...todos, newTodo];
+  
 		fetch('https://playground.4geeks.com/apis/fake/todos/user/AdriRiosRuiz', {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-	  body:JSON.stringify (todos.filter(
-		(t, currentIndex) => index != currentIndex
-	))
-    })
-    .then(resp => {
-        if (!resp.ok) throw Error(`La response es incorrecta`)
+		  method: "PUT",
+		  body: JSON.stringify(updatedTodos),
+		  headers: {
+			"Content-Type": "application/json"
+		  }
+		})
+		.then(resp => {
+		  if (!resp.ok) throw Error("La response no es ok");
+		  return resp.json();
+		})
+		.then(data => {
+		  setTodos(updatedTodos);
+		  setInputValue("");
+		})
+		.catch(error => {
+		  console.error("Error en la solicitud PUT:", error);
+		});
+	  }
+	};
+  
+	const handleDelete = (index) => {
+	  const updatedTodos = todos.filter((_, i) => i !== index);
+  
+	  fetch('https://playground.4geeks.com/apis/fake/todos/user/AdriRiosRuiz', {
+		method: "PUT",
+		body: JSON.stringify(updatedTodos),
+		headers: {
+		  "Content-Type": "application/json"
+		}
+	  })
+	  .then(resp => {
+		if (!resp.ok) throw Error("La response no es ok");
 		return resp.json();
-    })
-    .then(data => {
-      setTodos(data) 
-    })
-    .catch(error => {
-       
-        console.log(error);
-    });
-
-		setTodos(
-			todos.filter(
-				(t, currentIndex) => index != currentIndex
-			)
-		)
-
-	}
-
+	  })
+	  .then(data => {
+		setTodos(updatedTodos);
+	  })
+	  .catch(error => {
+		console.error("Error en la solicitud PUT:", error);
+	  });
+	};
+  
 	useEffect(() => {
-		
-		fetch('https://playground.4geeks.com/apis/fake/todos/user/AdriRiosRuiz', {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(resp => {
-        if (!resp.ok) throw Error(`La response es incorrecta`)
+	  fetch('https://playground.4geeks.com/apis/fake/todos/user/AdriRiosRuiz', {
+		method: "GET",
+		headers: {
+		  "Content-Type": "application/json"
+		}
+	  })
+	  .then(resp => {
+		if (!resp.ok) throw Error("La response no es ok");
 		return resp.json();
-    })
-    .then(data => {
-      setTodos(data) 
-    })
-    .catch(error => {
-       
-        console.log(error);
-    });
-
-	  } , [ ]);
-
-
-
+	  })
+	  .then(data => {
+		setTodos(data);
+	  })
+	  .catch(error => {
+		console.error("Error en la solicitud GET:", error);
+	  });
+	}, []);
+  
 	return (
-		<div className="container">
-			<h1 className="text-center mt-5">To do list</h1>
-			<ul className="">
-				<li>
-					<input className="p-1"
-						type="text"
-						onChange={(e) => setInputValue(e.target.value)}
-						value={inputValue}
-						onKeyPress={(e) => {
-							if (e.key === "Enter") {
-								setTodos(todos.concat(inputValue));
-								setInputValue("");
-							}
-						}}
-						placeholder="what do you need to do?" ></input>
-				</li>
-				{todos.map((item, index) => (
-					<li>
-
-						{item.label}	<i className="fa-sharp fa-solid fa-trash" style={{ color: '#000000' }} onClick={() => eliminarTareas(index)
-						}></i>
-					</li>
-				))}
-
-			</ul >
-			<div className="border border-white p-1">
-					{todos.length} task
-			</div>
-			
-		</div >
+	  <div className="container mt-5">
+		<h1>My Todos List</h1>
+		<ul>
+		  <li>
+			<input
+			  type="text"
+			  value={inputValue}
+			  onChange={handleInputChange}
+			  onKeyPress={handleKeyPress}
+			  placeholder="¿Qué tengo que hacer?"
+			/>
+		  </li>
+		  {todos.map((item, index) => (
+			<li key={index}>
+			  {item.label}{" "}
+			  <i
+				className="fas fa-trash-alt"
+				onClick={() => handleDelete(index)}
+			  ></i>
+			</li>
+		  ))}
+		</ul>
+		<div>{todos.length} tasks</div>
+	  </div>
 	);
-};
-
-export default Home;
+  };
+  
+  export default Home;
+  
