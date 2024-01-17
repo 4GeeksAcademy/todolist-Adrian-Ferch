@@ -1,7 +1,9 @@
 
 body{
-    background-color: black;
-    color:white;
+    background-image: url(https://c8.alamy.com/compes/raa0dh/tablet-pc-sobre-fondo-de-piedra-gris-pantalla-blanca-aislada-con-espacio-de-copia-espacio-para-el-texto-vacia-la-pantalla-en-blanco-blanco-y-negro-raa0dh.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    color:rgb(255, 253, 253);
     font-weight: bolder;
     font-size: larger;
 }
@@ -10,16 +12,22 @@ ul{
     margin-bottom: 0px;
 }
 li{
-    background-color: grey;
+    color:rgb(0, 0, 0);
+    background-color: inherit;
 }
 ul li{
-    border: 1px solid grey;
+    border: 1px solid inherit;
     list-style: none;
     padding: 5px;
 }
 
 input{
     border: none;
-    width: 100%;
+    width: 50%;
+   
     
+}
+
+.h{
+    color:black
 }

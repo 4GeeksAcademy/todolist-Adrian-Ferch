@@ -78,11 +78,11 @@ const Home = () => {
 	}, []);
   
 	return (
-	  <div className="container mt-5">
-		<h1>My Todos List</h1>
-		<ul>
-		  <li>
-			<input
+	  <div className="container mt-5 ">
+		<h1 className="d-flex justify-content-center p-4">My Todos List</h1>
+		<ul className="">
+		  <li className="d-flex justify-content-center p-4">
+			<input 
 			  type="text"
 			  value={inputValue}
 			  onChange={handleInputChange}
@@ -91,7 +91,7 @@ const Home = () => {
 			/>
 		  </li>
 		  {todos.map((item, index) => (
-			<li key={index}>
+			<li className="d-flex justify-content-center" key={index}>
 			  {item.label}{" "}
 			  <i
 				className="fas fa-trash-alt"
@@ -100,7 +100,7 @@ const Home = () => {
 			</li>
 		  ))}
 		</ul>
-		<div>{todos.length} tasks</div>
+		<div className="h d-flex justify-content-center">{todos.length} tasks</div>
 	  </div>
 	);
   };
